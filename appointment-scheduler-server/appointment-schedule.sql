@@ -6,4 +6,4 @@ CREATE DATABASE appointment_scheduler_db;
 \connect appointment_scheduler_db;
 
 -- run script 
-\i appointment-scheduler-schema.sql 
+\i appointment-schedule-schema.sql 
