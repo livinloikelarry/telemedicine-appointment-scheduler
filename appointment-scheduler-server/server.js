@@ -1,15 +1,37 @@
 const express = require("express");
-const cors = require("cors");
+const morgan = require("morgan");
 const { PORT } = require("./config");
-const morgan = require("morgan"); // logger that will allow us to log activity
+const authRoutes = require("./routes/auth");
 
-const app = express(); // new instance of express application to store in app variable
-
-// parse incoming requests with JSON payloads
-app.use(cors); // enables cross orgin resource sharing for all origins that may not be on this port
-app.use(express.json());
+const app = express();
 app.use(morgan("tiny"));
+app.use(express.json());
+
+// set routes!
+app.use("/auth", authRoutes);
+
+app.get("/", (req, res) => {
+  res.send("Hello World!");
+});
+
+/** Handle 404 errors -- this matches everything
+ * if the endpoint that the user sends a request to does not match any of our endpoints in our app
+ * this middleware will be called
+ */
+app.use((req, res, next) => {
+  return next(new NotFoundError());
+});
+
+/** Generic error handler; anything unhandled goes here. */
+app.use((err, req, res, next) => {
+  const status = err.status || 500;
+  const message = err.message;
+
+  return res.status(status).json({
+    error: { message, status },
+  });
+});
 
 app.listen(PORT, () => {
-  console.log(`🚀 Server running on http://localhost:` + PORT);
+  console.log(`🚀 Server running on http://localhost:${PORT}`);
 });
