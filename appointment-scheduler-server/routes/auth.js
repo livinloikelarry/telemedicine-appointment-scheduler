@@ -4,6 +4,8 @@ const express = require("express");
 const router = express.Router();
 const User = require("../models/users");
 const { makePublicUser } = require("../models/users");
+const security = require("../middleware/security");
+// const { createUserJwt } = require("../utils/tokens");
 
 router.post("/login", async function (req, res, next) {
   try {
@@ -28,6 +30,17 @@ router.post("/register", async (req, res, next) => {
 
 router.post("/test", async (req, res, next) => {
   return res.status(201).jsong("u did it");
+});
+
+router.get("/me", security.requireAuthenticatedUser, async (req, res, next) => {
+  try {
+    const { email } = res.locals.user;
+    const user = await User.fetchUserByEmail(email);
+    const publicUser = makePublicUser(user);
+    return res.status(200).json({ user: publicUser });
+  } catch (err) {
+    return next(err);
+  }
 });
 
 module.exports = router;

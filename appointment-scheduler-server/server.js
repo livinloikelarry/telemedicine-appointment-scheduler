@@ -2,14 +2,16 @@ const express = require("express");
 const morgan = require("morgan");
 const { PORT } = require("./config");
 const authRoutes = require("./routes/auth");
+const security = require("./middleware/security");
 
 const app = express();
 app.use(morgan("tiny"));
 app.use(express.json());
+app.use(security.extractUserFromJwt);
 
 // set routes!
 app.use("/auth", authRoutes);
-
+app.use();
 app.get("/", (req, res) => {
   res.send("Hello World!");
 });
