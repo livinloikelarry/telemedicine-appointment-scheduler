@@ -34,6 +34,7 @@ class User {
   }
 
   static async register(credentials) {
+    console.log(credentials);
     // create a new user in the db with all of their info and return the user
     const requiredFields = ["first_name", "last_name", "email", "password"];
     requiredFields.forEach((property) => {

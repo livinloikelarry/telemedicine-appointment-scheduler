@@ -4,6 +4,7 @@ const { PORT } = require("./config");
 const authRoutes = require("./routes/auth");
 const docRoutes = require("./routes/doctors");
 const security = require("./middleware/security");
+const { NotFoundError } = require("./utils/errors");
 
 const app = express();
 app.use(morgan("tiny"));

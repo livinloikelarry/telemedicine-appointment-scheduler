@@ -5,7 +5,7 @@ const router = express.Router();
 const User = require("../models/users");
 const { makePublicUser } = require("../models/users");
 const security = require("../middleware/security");
-// const { createUserJwt } = require("../utils/tokens");
+const { createUserJwt } = require("../utils/tokens");
 
 router.post("/login", async function (req, res, next) {
   try {
@@ -21,7 +21,7 @@ router.post("/register", async (req, res, next) => {
   try {
     // create a new user in our db. first, last, email, pw
     const user = await User.register(req.body);
-    // const token = createUserJwt(user);
+    const token = createUserJwt(user);
     return res.status(201).json({ user });
   } catch (err) {
     next(err);
