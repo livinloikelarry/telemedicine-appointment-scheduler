@@ -2,6 +2,7 @@ const express = require("express");
 const morgan = require("morgan");
 const { PORT } = require("./config");
 const authRoutes = require("./routes/auth");
+const docRoutes = require("./routes/doctors");
 const security = require("./middleware/security");
 
 const app = express();
@@ -11,7 +12,7 @@ app.use(security.extractUserFromJwt);
 
 // set routes!
 app.use("/auth", authRoutes);
-app.use();
+app.use("/doctors", docRoutes);
 app.get("/", (req, res) => {
   res.send("Hello World!");
 });
