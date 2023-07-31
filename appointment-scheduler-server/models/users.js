@@ -10,11 +10,12 @@ class User {
       first_name: user.first_name,
       last_name: user.last_name,
       email: user.email,
-      is_doctor: user.is_doctor,
+      doctor: user.doctor,
     };
   }
   // these methods are all hitting postgres / using the database
   static async login(credentials) {
+    console.log(credentials);
     const requiredFields = ["email", "password"];
     requiredFields.forEach((property) => {
       if (!credentials.hasOwnProperty(property)) {
@@ -36,7 +37,13 @@ class User {
   static async register(credentials) {
     console.log(credentials);
     // create a new user in the db with all of their info and return the user
-    const requiredFields = ["first_name", "last_name", "email", "password"];
+    const requiredFields = [
+      "first_name",
+      "last_name",
+      "email",
+      "password",
+      "doctor",
+    ];
     requiredFields.forEach((property) => {
       if (!credentials.hasOwnProperty(property)) {
         throw new BadRequestError(`Missing ${property} in request body.`);
@@ -62,15 +69,16 @@ class User {
     const normalizedEmail = credentials.email.toLowerCase();
 
     const userResult = await db.query(
-      `INSERT INTO users (first_name, last_name, email, password)
-       VALUES ($1, $2, $3, $4)
-       RETURNING id, first_name, last_name, email, is_doctor;
+      `INSERT INTO users (first_name, last_name, email, password, doctor)
+       VALUES ($1, $2, $3, $4, $5)
+       RETURNING id, first_name, last_name, email, doctor;
       `,
       [
         credentials.first_name,
         credentials.last_name,
         normalizedEmail,
         hashedPassword,
+        credentials.doctor,
       ]
     );
     const user = userResult.rows[0];

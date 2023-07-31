@@ -1,5 +1,6 @@
 const express = require("express");
 const morgan = require("morgan");
+const cors = require("cors");
 const { PORT } = require("./config");
 const authRoutes = require("./routes/auth");
 const docRoutes = require("./routes/doctors");
@@ -10,6 +11,8 @@ const app = express();
 app.use(morgan("tiny"));
 app.use(express.json());
 app.use(security.extractUserFromJwt);
+// enable cross-origin resource sharing for all origins for all requests
+app.use(cors());
 
 // set routes!
 app.use("/auth", authRoutes);
