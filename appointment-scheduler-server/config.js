@@ -2,7 +2,6 @@ require("dotenv").config();
 require("colors");
 
 const PORT = process.env.PORT ? Number(process.env.PORT) : 3001;
-// const PORT = "https://focus-4-you.herokuapp.com";
 const SECRET_KEY = process.env.SECRET_KEY || "secret_dev";
 
 const IS_TESTING = process.env.NODE_ENV === "test";
